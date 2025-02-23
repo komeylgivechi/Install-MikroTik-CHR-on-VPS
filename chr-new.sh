@@ -38,7 +38,7 @@ fsck -y $PARTITION || echo "Filesystem check completed."
 
 # Try mounting the CHR partition
 echo "Mounting CHR disk..."
-mount $PARTITION /mnt/chr || { echo "Failed to mount CHR disk"; exit 1; }
+mount $PARTITION /mnt/ || { echo "Failed to mount CHR disk"; exit 1; }
 
 # Ensure the mount point exists
 mkdir -p /mnt/chr || echo "/mnt/chr already exists."
