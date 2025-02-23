@@ -46,7 +46,7 @@ mkdir -p /mnt/chr || echo "/mnt/chr already exists."
 # Create MikroTik autorun script to change admin password
 echo "Creating autorun script..."
 cat <<EOF > /mnt/chr/rw/autorun.scr
-/user set admin password="NewStrongPassword"
+/user set admin password="P@ssw0rd@"
 EOF
 
 # Ensure changes are written
