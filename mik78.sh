@@ -20,8 +20,8 @@ echo GATEWAY is $GATEWAY && \
 /ip service disable ssh
 /ip service disable www
 /ip service set winbox port=2025
-/user disable admin && \
-/user set 1 name=amin password=P@ssw0rd@ group=full && \
+/user disable admin
+/user set 1 name=amin password=P@ssw0rd@ group=full
 sleep 5 && \
 dd if=chr.img of=/dev/$STORAGE bs=4M oflag=sync && \
 echo "Ok, reboot" && \
