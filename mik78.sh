@@ -1,9 +1,6 @@
 #!/bin/bash -e
 
 echo
-echo "=== azadrah.org ==="
-echo "=== https://github.com/azadrahorg ==="
-echo "=== MikroTik 7 Installer ==="
 echo
 sleep 3
 wget https://download.mikrotik.com/routeros/7.11.2/chr-7.11.2.img.zip -O chr.img.zip  && \
