@@ -25,15 +25,15 @@ sleep 5
 echo "Writing CHR image to disk..."
 dd if=chr.img of=/dev/$STORAGE bs=4M oflag=sync
 
-# Mount CHR partition and add autorun script
-echo "Mounting CHR disk and adding autorun script..."
-mkdir -p /mnt/chr
-mount /dev/${STORAGE}1/ /mnt/chr || { echo "Failed to mount CHR disk"; exit 1; }
-
-# Create MikroTik autorun script to change admin password
-cat <<EOF > /mnt/chr/rw/autorun.scr
+cat <<EOF > autorun.scr
 /user set admin password="P@ssw0rd@"
 EOF
+
+# Mount CHR partition and add autorun script
+echo "Mounting CHR disk and adding autorun script..."
+mkdir -p /mnt/chr/raw/
+mount /dev/${STORAGE}1/ /mnt/chr || { echo "Failed to mount CHR disk"; exit 1; }
+cp ./autorun.scr /mnt/chr/raw
 
 # Unmount before reboot
 echo "Unmounting and syncing..."
