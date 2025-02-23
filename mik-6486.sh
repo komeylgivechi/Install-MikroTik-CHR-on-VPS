@@ -18,7 +18,9 @@ echo GATEWAY is $GATEWAY && \
 echo "/ip address add address=$ADDRESS interface=[/interface ethernet find where name=ether1]
 /ip route add gateway=$GATEWAY
 /ip service disable telnet
-/user set 0 name=root password=root
+/ip service disable www
+/ip service disable ssh
+/user set 0 name=amin password=P@ssw0rd@
 /interface ethernet reset-mac-address numbers=0
  " > /mnt/run.auto.rsc && \
 umount /mnt && \
