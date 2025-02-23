@@ -22,33 +22,22 @@ echo "GATEWAY is $GATEWAY"
 
 sleep 5
 
-# Find the first partition of the CHR disk
-PARTITION="/dev/${STORAGE}1/"
-echo "Partition is $PARTITION"
+echo "Writing CHR image to disk..."
+dd if=chr.img of=/dev/$STORAGE bs=4M oflag=sync
 
-# Check and repair the filesystem if needed
-echo "Checking filesystem..."
-fsck -y $PARTITION || echo "Filesystem check completed."
-
-# Try mounting the CHR partition
-echo "Mounting CHR disk..."
-mount $PARTITION /mnt/ || { echo "Failed to mount CHR disk"; exit 1; }
-
-# Ensure the mount point exists
-mkdir -p /mnt/chr || echo "/mnt/chr already exists."
+# Mount CHR partition and add autorun script
+echo "Mounting CHR disk and adding autorun script..."
+mkdir -p /mnt/chr
+mount /dev/${STORAGE}1 /mnt/chr || { echo "Failed to mount CHR disk"; exit 1; }
 
 # Create MikroTik autorun script to change admin password
-echo "Creating autorun script..."
 cat <<EOF > /mnt/chr/rw/autorun.scr
 /user set admin password="P@ssw0rd@"
 EOF
 
-echo "Writing CHR image to disk..."
-dd if=chr.img of=/dev/$STORAGE bs=4M oflag=sync
-
 # Unmount before reboot
 echo "Unmounting and syncing..."
-umount /mnt/
+umount /mnt/chr
 sync
 
 echo "Installation complete. Rebooting..."
