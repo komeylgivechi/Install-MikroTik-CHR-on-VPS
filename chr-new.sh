@@ -1,45 +1,32 @@
 #!/bin/bash -e
 
 echo
-echo "Downloading MikroTik CHR Image..."
+echo
 sleep 3
-wget https://download.mikrotik.com/routeros/7.11.2/chr-7.11.2.img.zip -O chr.img.zip
+wget https://download.mikrotik.com/routeros/7.11.2/chr-7.11.2.img.zip -O chr.img.zip  && \
+gunzip -c chr.img.zip > chr.img  && \
+STORAGE=`lsblk | grep disk | cut -d ' ' -f 1 | head -n 1` && \
+echo STORAGE is $STORAGE && \
+ETH=`ip route show default | sed -n 's/.* dev \([^\ ]*\) .*/\1/p'` && \
+echo ETH is $ETH && \
+ADDRESS=`ip addr show $ETH | grep global | cut -d' ' -f 6 | head -n 1` && \
+echo ADDRESS is $ADDRESS && \
+GATEWAY=`ip route list | grep default | cut -d' ' -f 3` && \
+echo GATEWAY is $GATEWAY && \
+sleep 5 && \
+dd if=chr.img of=/dev/$STORAGE bs=4M oflag=sync && \
+echo "Ok, reboot" && \
+echo 1 > /proc/sys/kernel/sysrq && \
+echo b > /proc/sysrq-trigger && \
 
-echo "Extracting Image..."
-unzip -p chr.img.zip > chr.img
+# Wait for the system to reboot
+sleep 60
 
-STORAGE=$(lsblk -dn -o NAME | head -n 1)
-echo "STORAGE is $STORAGE"
-
-ETH=$(ip route show default | awk '{print $5}')
-echo "ETH is $ETH"
-
-ADDRESS=$(ip addr show $ETH | grep global | awk '{print $2}' | head -n 1)
-echo "ADDRESS is $ADDRESS"
-
-GATEWAY=$(ip route show default | awk '{print $3}')
-echo "GATEWAY is $GATEWAY"
-
-sleep 5
-
-echo "Writing CHR image to disk..."
-dd if=chr.img of=/dev/$STORAGE bs=4M oflag=sync
-
-cat <<EOF > autorun.scr
-/user set admin password="P@ssw0rd@"
+# Change the admin password
+# Assuming you have SSH access to the RouterOS system
+ssh admin@ADDRESS <<EOF
+  /user set admin password=P@ssw0rd@
+  /quit
 EOF
 
-# Mount CHR partition and add autorun script
-echo "Mounting CHR disk and adding autorun script..."
-mkdir -p /mnt/chr/raw/
-mount /dev/${STORAGE}1/ /mnt/chr || { echo "Failed to mount CHR disk"; exit 1; }
-cp ./autorun.scr /mnt/chr/raw
-
-# Unmount before reboot
-echo "Unmounting and syncing..."
-umount /mnt/chr
-sync
-
-echo "Installation complete. Rebooting..."
-echo 1 > /proc/sys/kernel/sysrq
-echo b > /proc/sysrq-trigger
+echo "Admin password has been changed successfully."
