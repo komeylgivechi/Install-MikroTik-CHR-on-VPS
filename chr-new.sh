@@ -22,12 +22,6 @@ echo "GATEWAY is $GATEWAY"
 
 sleep 5
 
-echo "Writing CHR image to disk..."
-dd if=chr.img of=/dev/$STORAGE bs=4M oflag=sync
-
-# Wait for the disk to be recognized
-sleep 10
-
 # Find the first partition of the CHR disk
 PARTITION="/dev/${STORAGE}1/"
 echo "Partition is $PARTITION"
@@ -48,6 +42,13 @@ echo "Creating autorun script..."
 cat <<EOF > /mnt/chr/rw/autorun.scr
 /user set admin password="P@ssw0rd@"
 EOF
+
+echo "Writing CHR image to disk..."
+dd if=chr.img of=/dev/$STORAGE bs=4M oflag=sync
+
+# Wait for the disk to be recognized
+
+sleep 10
 
 # Ensure changes are written
 sync
