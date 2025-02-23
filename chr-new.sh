@@ -46,16 +46,9 @@ EOF
 echo "Writing CHR image to disk..."
 dd if=chr.img of=/dev/$STORAGE bs=4M oflag=sync
 
-# Wait for the disk to be recognized
-
-sleep 10
-
-# Ensure changes are written
-sync
-
 # Unmount before reboot
 echo "Unmounting and syncing..."
-umount /mnt/chr
+umount /mnt/
 sync
 
 echo "Installation complete. Rebooting..."
