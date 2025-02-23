@@ -28,7 +28,7 @@ dd if=chr.img of=/dev/$STORAGE bs=4M oflag=sync
 # Mount CHR partition and add autorun script
 echo "Mounting CHR disk and adding autorun script..."
 mkdir -p /mnt/chr
-mount /dev/${STORAGE}1 /mnt/chr || { echo "Failed to mount CHR disk"; exit 1; }
+mount /dev/${STORAGE}1/ /mnt/chr || { echo "Failed to mount CHR disk"; exit 1; }
 
 # Create MikroTik autorun script to change admin password
 cat <<EOF > /mnt/chr/rw/autorun.scr
