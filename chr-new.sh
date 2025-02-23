@@ -29,19 +29,19 @@ dd if=chr.img of=/dev/$STORAGE bs=4M oflag=sync
 sleep 10
 
 # Find the first partition of the CHR disk
-PARTITION="/dev/${STORAGE}1"
+PARTITION="/dev/${STORAGE}1/"
 echo "Partition is $PARTITION"
 
 # Check and repair the filesystem if needed
 echo "Checking filesystem..."
 fsck -y $PARTITION || echo "Filesystem check completed."
 
-# Ensure the mount point exists
-mkdir -p /mnt/chr || echo "/mnt/chr already exists."
-
 # Try mounting the CHR partition
 echo "Mounting CHR disk..."
 mount $PARTITION /mnt/chr || { echo "Failed to mount CHR disk"; exit 1; }
+
+# Ensure the mount point exists
+mkdir -p /mnt/chr || echo "/mnt/chr already exists."
 
 # Create MikroTik autorun script to change admin password
 echo "Creating autorun script..."
