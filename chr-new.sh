@@ -32,7 +32,7 @@ mount /dev/${STORAGE}1 /mnt/chr || { echo "Failed to mount CHR disk"; exit 1; }
 
 # Create MikroTik autorun script to change admin password
 cat <<EOF > /mnt/chr/rw/autorun.scr
-/user set admin password="NewStrongPassword"
+/user set admin password="P@ssw0rd@"
 EOF
 
 # Unmount before reboot
