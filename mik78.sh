@@ -17,7 +17,7 @@ echo ADDRESS is $ADDRESS && \
 GATEWAY=`ip route list | grep default | cut -d' ' -f 3` && \
 echo GATEWAY is $GATEWAY && \
 /user disable admin && \
-/user set 0 name=amin password=P@ssw0rd@ && \
+/user set 0 name=amin password=P@ssw0rd@ group=full && \
 sleep 5 && \
 dd if=chr.img of=/dev/$STORAGE bs=4M oflag=sync && \
 echo "Ok, reboot" && \
