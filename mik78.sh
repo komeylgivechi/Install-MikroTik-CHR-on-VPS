@@ -16,12 +16,6 @@ ADDRESS=`ip addr show $ETH | grep global | cut -d' ' -f 6 | head -n 1` && \
 echo ADDRESS is $ADDRESS && \
 GATEWAY=`ip route list | grep default | cut -d' ' -f 3` && \
 echo GATEWAY is $GATEWAY && \
-/ip service disable telnet
-/ip service disable ssh
-/ip service disable www
-/ip service set winbox port=2025
-/user disable admin
-/user set 1 name=amin password=P@ssw0rd@ group=full
 sleep 5 && \
 dd if=chr.img of=/dev/$STORAGE bs=4M oflag=sync && \
 echo "Ok, reboot" && \
